@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>THE PSYCHIC GAME</title>
+  </head>
+  <body>
+
+    <div id = "GAME">
+
+      <h1>THE PSYCHIC GAME!</h1>
+
+        <h2>Guess what letter I am thinking of</h2>
+
+          <p id="winsCounter">WINS: 0</p>
+
+          <p id="lossesCounter">LOSSES: 0</p>
+
+          <p id="guessesLeftCounter">GUESSES LEFT: 9</p>
+
+          <p id="guessesList">YOUR GUESSES SO FAR: </p>
+
+    </div>
+
+    <script>
+
+    //array of all possible options
+    var allChoices = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
+    //other variables to be used
+    var userArray = [];
+    var wins = 0;
+    var losses = 0;
+    var guessesLeft = 9;
+
+    //function to update counters in HTML
+    function updateCounters(){
+      document.getElementById("winsCounter").innerHTML = "WINS: " + wins;
+      document.getElementById("lossesCounter").innerHTML = "LOSSES: " + losses;
+      document.getElementById("guessesLeftCounter").innerHTML = "GUESSES LEFT: " + guessesLeft;
+      document.getElementById("guessesList").innerHTML = "YOUR GUESSES SO FAR: " + userArray;
+    }
+
+
+    //function for computer to choose letter
+    function computerPick(){
+      return allChoices[Math.floor(Math.random() * allChoices.length)];
+    }
+
+    //set computer Letter
+    var computerLetter = computerPick();
+  
+
+    //function for user to choose letter
+    document.onkeyup = function(event){
+
+      //user chooses letter
+      var userLetter = event.key.toLowerCase();
+
+      //check to see if user entered a non-letter key
+      if (allChoices.indexOf(userLetter) < 0){
+        alert("That is not a valid letter choice!  Please choose a letter.");
+      }
+
+      //check if letter has already been used as a guess
+      else if (userArray.indexOf(userLetter) >= 0){
+        alert("That letter has already been guessed!  Please choose another.");
+      }
+
+      //if user guess matches computer letter then wins goes up, guesses reset, and computer chooses new letter
+      else if (userLetter === computerLetter){
+        wins++;
+        guessesLeft = 9;
+        userArray = [];
+        updateCounters();
+        computerLetter = computerPick();
+        return;
+      }
+
+      //if the user letter and computer letter don't match and there are no guesses left, losses goes up and game resets
+      else if ((guessesLeft === 1) && (userLetter !== computerLetter)){
+        losses++;
+        guessesLeft = 9;
+        userArray = [];
+        updateCounters();
+        computerLetter = computerPick();
+        return;            
+      }
+
+      //if the user letter and computer letter don't match but still guesses left, game proceeds
+      else {
+        guessesLeft--;
+        userArray.push(userLetter);
+        updateCounters();
+      }
+        
+    }
+
+    </script>
+    
+  </body>
+
+</html>
